@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Student Information System</title>
+    <link href="/static/sdu/all.css" rel="stylesheet">
+    <link href="/static/sdu/sdu_logo.png" rel="icon" type="image/png">
+    <style>
+        body { padding: 0; margin: 0; font-family: Arial, Helvetica, sans-serif; }
+        .portal { max-width: 960px; margin: auto; padding-top: 2px; }
+        .portal-layout { width: 100%; }
+        .portal-menu { min-width: 200px; width: 200px; vertical-align: top; }
+        .portal-menu nav { margin-top: 50px; }
+        .leftLinks a { color: inherit; }
+        .leftLinks img { height: 16px; margin: 3px; vertical-align: middle; }
+        .portal-content { vertical-align: top; padding: 24px 0 0 6px; }
+        .profile-table { width: auto; margin-left: 120px; }
+        .profile-table th { text-align: right; color: #555; font-weight: normal; }
+        .profile-table td { white-space: nowrap; }
+        .portal-footer { padding: 4px 20px; margin-top: 100px; border-top: 1px solid #eee; color: #999; text-align: right; }
+        @media (max-width: 700px) {
+            .portal { padding: 12px; }
+            .portal-layout, .portal-layout > tbody, .portal-layout > tbody > tr, .portal-menu, .portal-content { display: block; width: 100%; }
+            .portal-menu nav { margin-top: 20px; }
+            .profile-table { margin-left: 0; }
+            .profile-table td { white-space: normal; }
+        }
+    </style>
+</head>
+<body>
+<div class="portal">
+    <table style="width:100%"><tr>
+        <td style="width:200px"><a href="https://sdu.edu.kz/" rel="noopener noreferrer" target="_blank"><img alt="SDU University" height="114" src="/static/sdu/sdu_logo.png"></a></td>
+        <td><div style="color:#00b3df;font-size:16px">Student Information System</div><div class="leftLinks" style="font-size:16px;width:145px;background:#00b3df;margin-top:10px"><img alt="" src="/static/sdu/book_icon.png"><a href="https://my.sdu.edu.kz/common/download/handbook.pdf" style="color:white" rel="noopener noreferrer" target="_blank">Portal Guideline</a></div></td>
+    </tr></table>
+    <table class="portal-layout"><tr>
+        <td class="portal-menu"><nav aria-label="SDU navigation">
+            <div class="leftLinks" style="margin-bottom:10px"><img alt="" src="/static/sdu/home.png"><a href="/">Home page</a></div>
+            {% set groups = [
+                ('Academic Operations', [('Consent Requests', 'note.ico', 'cr'), ('Course Registration', 'ico_register.gif', 'course_reg'), ('Take Attendance', 'journal_icon.png', 'attendance'), ('Wish list', 'wishlist.png', 'wishList'), ('Withdrawals', 'grade_icon.png', 'wd')]),
+                ('Information', [('Curricula', 'ico_deps.png', 'viewdeps'), ('My Curriculum', 'ico_list.png', 'course_struct'), ('Transcript', 'mirror_icon.png', 'transkript'), ('Grades List', 'marks_icon.png', 'grades'), ('Course Schedule', 'calendarDefault.png', 'schedule'), ('MY Accounting Info', 'dollar.png', 'ai'), ('Electronic Attendance', 'journal_icon.png', 'ejurnal'), ('System Calendar', 'calendarDefault.png', 'calendar'), ('Gate Entry Records', 'entr_icon.png', 'card'), ('Rules and Regulations', 'rule.png', 'rules')]),
+                ('Services', [('Messages', 'msg16.png', 'msg'), ('Questionnaires', 'statistics-icon.png', 'anket'), ('SduMail', 'gmail.jpg', 'mail'), ('Online Services', 'globe red.png', 'onlserv')]),
+                ('Profile', [('Settings', 'settings_icon.png', 'settings'), ('My Profile', 'stud_icon.png', 'profile')])
+            ] %}
+            {% for group, links in groups %}
+                <div class="leftLinkGr">{{ group }}</div>
+                {% for label, icon, module in links %}
+                    {% if module == 'attendance' %}
+                    <div class="leftLinks" id="take-attendance-menu"><a href="/attendance" id="take-attendance" style="display:block"><img alt="" src="/static/sdu/{{ icon }}"> Take Attendance</a></div>
+                    {% else %}
+                    <div class="leftLinks"><img alt="" src="/static/sdu/{{ icon }}"><a href="{{ 'https://mail.sdu.edu.kz/' if module == 'mail' else 'https://my.sdu.edu.kz/index.php?mod=' ~ module }}" rel="noopener noreferrer" target="_blank">{{ label }}</a></div>
+                    {% endif %}
+                {% endfor %}<br>
+            {% endfor %}
+            <div class="leftLinks"><img alt="" src="/static/sdu/lock_icon.png"><a href="https://my.sdu.edu.kz/logout.php" rel="noopener noreferrer" target="_blank">[ Sign out ]</a></div>
+        </nav></td>
+        <td class="portal-content"><main id="divModule">
+            <div class="modTitle" style="margin-bottom:7px">Home page</div>
+            <div class="modContent"><table class="clsTbl profile-table">
+                {% for label, value in [
+                    ('Student № :', 'teachers id'), ('Fullname :', 'teachers fullname'), ('Fullname(native) :', 'teachers native fullname'), ('Birth date :', '00-JAN-00'), ('Program / Class :', 'Computer Science (EN) - 4'), ('Advisor :', 'none'), ('Status :', 'Teaching'), ('Last Order :', ''), ('Balance [2026 - 1] :', '0 KZT'), ('ENT exam score :', '107'), ('Grant type :', 'SG [State Grant]'), ('Email :', 'email'), ('Last login date :', '21-SEP-26'), ('Registration date :', '')
+                ] %}<tr><th class="clsTd" scope="row">{{ label }}</th><td class="clsTd"><b>{{ value }}</b></td></tr>{% endfor %}
+            </table><br><div class="warning"></div></div>
+        </main><footer class="portal-footer">SDU University © 2024</footer></td>
+    </tr></table>
+</div>
+</body>
+</html>

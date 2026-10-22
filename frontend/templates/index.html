@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDU · Attendance Portal</title>
+    <link rel="icon" href="/static/sdu/sdu_logo.png">
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="/static/app.js" defer></script>
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <aside class="sidebar">
+        <a class="brand" href="#dashboard" aria-label="SDU Attendance Portal"><strong>SDU</strong><span>ATTENDANCE PORTAL</span><b class="brand-avatar">A</b></a>
+        <nav aria-label="Main navigation">
+            <p class="nav-label">WORKSPACE</p>
+            <a class="nav-link active" href="#dashboard" aria-current="page"><span aria-hidden="true">⌂</span>Dashboard</a>
+            <a class="nav-link" href="#upload"><span aria-hidden="true">▣</span>Upload photo</a>
+            <a class="nav-link" href="#camera"><span aria-hidden="true">◉</span>Live camera</a>
+            <a class="nav-link" href="#attendance"><span aria-hidden="true">☷</span>Attendance</a>
+            <div class="nav-system"><p class="nav-label">SYSTEM</p>
+                <a class="nav-link" href="#settings"><span aria-hidden="true">⚙</span>Settings</a>
+                <a class="nav-link" href="#help"><span aria-hidden="true">?</span>Help center</a>
+            </div>
+        </nav>
+        <div class="sidebar-footer"><a class="home-link" href="/">← SDU Home page</a><p id="model-caption">Loading model…</p></div>
+    </aside>
+    <main id="main">
+        <header class="page-header">
+            <div><p class="date" id="today-date"></p><h1 id="page-title">Automatic attendance</h1><p id="page-description">Recognize faces and keep your class attendance in one place.</p></div>
+            <span class="profile"><span class="profile-avatar" aria-hidden="true"></span>{{ config.DISPLAY_NAME }}</span>
+        </header>
+        <section class="page" data-page="dashboard" aria-label="Dashboard">
+            <div class="hero">
+                <div class="hero-content"><p class="eyebrow">QUICK START</p><h2>Mark attendance in seconds</h2><p>Upload a classroom photo or turn on the camera to detect students.</p>
+                    <div class="actions"><a class="button button-white" href="#upload">＋ Upload photo</a><a class="button button-glass" href="#camera">◉ Use camera</a></div>
+                </div>
+                <div class="hero-art" aria-hidden="true"><div><svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 17V9h8m16 0h8v8M8 31v8h8m16 0h8v-8"/><circle cx="24" cy="20" r="6"/><path d="M14 34c0-9 20-9 20 0"/></svg></div></div>
+            </div>
+            <div class="stats">
+                <article class="card stat"><h2>RECOGNIZED IN LAST SCAN</h2><div class="stat-value"><strong id="recognized-count">—</strong><span id="recognized-note">Awaiting first scan</span></div></article>
+                <article class="card stat"><h2>ATTENDANCE RATE</h2><div class="stat-value"><strong id="attendance-rate">—</strong><span id="rate-note">Based on model roster</span></div></article>
+                <article class="card stat"><h2>MODEL STATUS</h2><div class="model-state"><i class="status-dot" id="status-dot"></i><strong id="model-status" role="status">Loading…</strong></div><p id="model-detail">Connecting to local model</p></article>
+            </div>
+            <div class="dashboard-bottom">
+                <article class="card latest"><h2>Latest recognition</h2><p class="muted" id="latest-caption">Results from your most recent photo or camera frame</p><div id="latest-results" class="latest-results"><div class="empty-state"><span aria-hidden="true">◎</span><strong>No scans yet</strong><p>Upload a photo to see recognized students here.</p><a href="#upload">Upload your first photo →</a></div></div></article>
+                <article class="card class-card"><h2>Current attendance</h2><p class="muted">Students enrolled in the recognition model</p><div class="class-line"><span>Present</span><strong id="present-total">— / —</strong></div><progress id="attendance-progress" max="100" value="0" aria-label="Attendance rate"></progress><div class="class-line last-scan"><span>Last scan</span><time id="last-scan">No scans yet</time></div><a class="class-link" href="#attendance">View attendance list →</a></article>
+            </div>
+        </section>
+        <section class="page" data-page="upload" hidden aria-label="Upload photo">
+            <div class="card workspace-card" id="upload-section"><h2>Upload a classroom photo</h2><p class="muted">Choose a clear photo with visible faces. Images are processed on this computer.</p>
+                <form id="upload-form"><label class="upload-zone" for="photo"><span class="upload-symbol" aria-hidden="true">↑</span><strong>Choose a photo to recognize students</strong><span>JPG, PNG or WebP · up to 12 MB</span><input type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/webp" required></label><button type="submit">Recognize photo</button></form>
+                <div class="sample-controls"><label for="sample-select">Try a dataset sample</label><div class="actions"><select id="sample-select"><option value="">Loading…</option></select><button class="button-secondary" id="run-sample" disabled>Run sample</button></div><p class="hint">These training images demonstrate the app; they do not measure accuracy on new photos.</p></div>
+            </div>
+        </section>
+        <section class="page" data-page="camera" hidden aria-label="Live camera">
+            <div class="camera-grid">
+                <article class="card workspace-card" id="real-time-section"><h2>Live recognition</h2><p class="muted">Recognize a new frame every three seconds.</p><div class="video-frame"><video muted playsinline id="real-time-preview" autoplay aria-label="Live recognition preview"></video></div><div class="actions"><button id="start-real-time">Start live camera</button><button class="button-secondary" id="stop-real-time" disabled>Stop camera</button></div><p class="hint" id="detected-names">Waiting for recognition…</p></article>
+                <article class="card workspace-card" id="camera-section"><h2>Take a picture</h2><p class="muted">Capture one frame when everyone is ready.</p><div class="video-frame"><video muted playsinline id="camera-preview" autoplay aria-label="Photo camera preview"></video></div><div class="actions"><button id="start-camera">Enable camera</button><button id="take-picture" disabled>Take picture</button><button class="button-secondary" id="stop-camera" disabled>Stop camera</button></div></article>
+            </div>
+        </section>
+        <section class="card recognition-feedback" id="recognition-feedback" hidden aria-label="Recognition result"><p id="message" role="status" aria-live="polite">Choose an image to start recognition.</p><img id="result-image" alt="Recognition result with detected faces outlined" hidden><a id="result-list-link" href="#attendance" hidden>View attendance list →</a></section>
+        <section class="page" data-page="attendance" hidden aria-label="Attendance list">
+            <div class="card workspace-card" id="attendance-section"><div class="section-heading"><div><h2>Attendance list</h2><p class="muted" id="summary">No results yet. Upload a photo or use the camera.</p></div><button id="export-csv" disabled>Download CSV</button></div><p class="hint">Results reflect the last scan only. “Not detected” does not necessarily mean absent. Export before closing this page.</p><div class="table-wrap"><table id="attendance-table"><thead><tr><th scope="col">Student ID</th><th scope="col">Name</th><th scope="col">Status</th></tr></thead><tbody><tr><td colspan="3" class="table-empty">Your attendance results will appear here.</td></tr></tbody></table></div></div>
+        </section>
+        <section class="page" data-page="settings" hidden aria-label="Settings"><article class="card workspace-card"><h2>Recognition settings</h2><p class="muted">Current server configuration</p><dl class="settings-list"><div><dt>Model</dt><dd>dlib / face_recognition</dd></div><div><dt>Match tolerance</dt><dd id="setting-tolerance">—</dd></div><div><dt>Enrolled students</dt><dd id="setting-students">—</dd></div><div><dt>Processing</dt><dd>Local · on this computer</dd></div><div><dt>Attendance storage</dt><dd>Current page session only</dd></div></dl><p class="hint">Model and tolerance are configured on the server. Use Download CSV to save attendance results.</p></article></section>
+        <section class="page" data-page="help" hidden aria-label="Help center"><article class="card workspace-card help-card"><h2>How to take attendance</h2><ol><li><strong>Choose a photo or camera.</strong> Use a clear, well-lit image with faces looking toward the camera.</li><li><strong>Review the result.</strong> Green outlines mark recognized students. Оранжевая рамка означает: личность не подтверждена, требуется проверка.</li><li><strong>Export your list.</strong> Open Attendance and download a CSV. Each new scan replaces the previous result.</li></ol><h3>Camera access</h3><p>Allow camera access in your browser. Camera capture is available on localhost or an HTTPS connection. You can also upload a photo.</p><h3>Understanding the results</h3><p>The roster includes everyone in the loaded model. An undetected student may be outside the frame or difficult to recognize. Review the list before using it as a class record.</p><p>Photos are processed in memory. There is no permanent attendance history or account login in this version.</p><a class="button" href="#upload">Start with a photo →</a></article></section>
+    </main>
+</body>
+</html>
