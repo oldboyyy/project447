@@ -1,0 +1,6 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Installed dependencies and generated caches are not project source"
+paths = ['''(^|/)(\.venv|venv|__pycache__|\.ruff_cache|\.git)/''']

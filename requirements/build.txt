@@ -1,0 +1,4 @@
+# Install before runtime dependencies; dlib may need compilation.
+cmake==3.31.6
+setuptools==65.5.0
+wheel==0.45.1
